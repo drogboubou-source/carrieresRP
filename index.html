@@ -60,7 +60,7 @@
   .club-logo-badge img{width:100%;height:100%;object-fit:contain;display:block;}
   .club-logo-badge .club-circle-fallback{font-size:9px;color:#0B1220;}
 
-  .player-showcase{position:absolute;right:16px;bottom:-64px;display:flex;flex-direction:column;align-items:center;gap:0;z-index:1;}
+  .player-showcase{position:absolute;right:16px;bottom:-56px;display:flex;flex-direction:column;align-items:center;gap:0;z-index:1;}
   .player-showcase img{height:132px;width:auto;max-width:none;object-fit:contain;display:block;filter:drop-shadow(0 8px 8px rgba(0,0,0,0.5));pointer-events:none;}
 
   .banner-bottom{display:flex;flex-direction:column;gap:0px;position:relative;z-index:1;padding-top:12px;border-top:1px solid rgba(255,255,255,0.06);}
@@ -68,6 +68,10 @@
   .name-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
   .player-name{font-family:'Teko',sans-serif;font-weight:700;font-size:clamp(26px,5vw,40px);line-height:1;background:linear-gradient(90deg,#EAF0FB 0%,#9CC1FF 45%,#F0908B 100%);-webkit-background-clip:text;background-clip:text;color:transparent;letter-spacing:0.5px;border:none;outline:none;flex:1;min-width:0;padding:0;}
   .mode-pill{flex-shrink:0;display:inline-flex;align-items:center;min-height:26px;padding:7px 16px 7px 14px;border-radius:7px;background:linear-gradient(90deg,#0F1B33 0%,#16294B 100%);border-left:3px solid #7EC8E3;color:#CFE3FA;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1.6px;line-height:1;white-space:nowrap;box-shadow:0 4px 12px rgba(0,0,0,0.4);}
+  .player-info-strips{display:flex;gap:4px;margin-top:6px;pointer-events:auto;}
+  .player-info-strip{background:linear-gradient(90deg,#0F1B33 0%,#16294B 100%);border-left:3px solid #7EC8E3;border-radius:6px;padding:4px 10px;box-shadow:0 4px 10px rgba(0,0,0,0.35);}
+  .player-info-strip:last-child{border-left-color:#E2504A;}
+  .player-info-input{background:transparent;border:none;outline:none;color:#CFE3FA;font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:1px;text-align:center;width:52px;padding:0;}
   .name-sub{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:-4px;}
   .name-sub-text{font-size:12px;color:var(--text-secondary);}
   .youtube-note{display:inline-flex;align-items:center;gap:7px;color:var(--text-secondary);font-size:12px;line-height:1;text-decoration:none;}
@@ -510,6 +514,14 @@ function render(){
         <div class="player-showcase">
           <img src="images/joueur-kawasaki.png" alt="${esc(player.name)} en tenue de Kawasaki Frontale" />
           <span class="mode-pill">Mode RP</span>
+          <div class="player-info-strips">
+            <div class="player-info-strip">
+              <input class="player-info-input" id="player-number-input" value="${esc(player.number)}" placeholder="N°" />
+            </div>
+            <div class="player-info-strip">
+              <input class="player-info-input" id="player-position-input" value="${esc(player.position)}" placeholder="Poste" />
+            </div>
+          </div>
         </div>
       </div>
       <div class="banner-bottom">
@@ -794,6 +806,12 @@ function attachEvents(){
   const dlInput = root.querySelector('#dream-league-input');
   if(dlInput) dlInput.addEventListener('input', () => { currentPlayer().dreamLeague = dlInput.value; touch(); });
   if(dlInput) dlInput.addEventListener('change', () => { currentPlayer().dreamLeague = dlInput.value; touch(); });
+  const numInput = root.querySelector('#player-number-input');
+  if(numInput) numInput.addEventListener('input', () => { currentPlayer().number = numInput.value; touch(); });
+  if(numInput) numInput.addEventListener('change', () => { currentPlayer().number = numInput.value; touch(); });
+  const posInput = root.querySelector('#player-position-input');
+  if(posInput) posInput.addEventListener('input', () => { currentPlayer().position = posInput.value; touch(); });
+  if(posInput) posInput.addEventListener('change', () => { currentPlayer().position = posInput.value; touch(); });
 
   const addYearBtn = root.querySelector('[data-action="add-year"]');
   if(addYearBtn) addYearBtn.addEventListener('click', () => { currentPlayer().years.push(emptyYear()); touch(); render(); });
