@@ -71,7 +71,7 @@
   .player-showcase{position:absolute;right:8px;bottom:-72px;display:flex;flex-direction:column;align-items:center;gap:0;z-index:1;}
   .player-showcase img{height:142px;width:auto;max-width:none;object-fit:contain;display:block;filter:drop-shadow(0 8px 8px rgba(0,0,0,0.5));pointer-events:none;}
 
-  .banner-bottom{display:flex;flex-direction:column;gap:0px;position:relative;z-index:1;padding-top:12px;border-top:1px solid rgba(255,255,255,0.06);}
+  .banner-bottom{display:flex;flex-direction:column;gap:0px;position:relative;z-index:1;padding-top:26px;border-top:1px solid rgba(255,255,255,0.06);}
   .banner-name-block{flex:1;min-width:200px;display:flex;flex-direction:column;gap:0px;margin-top:20px;}
   .name-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
   .player-name{font-family:'Teko',sans-serif;font-weight:700;font-size:clamp(26px,5vw,40px);line-height:1;background:linear-gradient(90deg,#EAF0FB 0%,#9CC1FF 45%,#F0908B 100%);-webkit-background-clip:text;background-clip:text;color:transparent;letter-spacing:0.5px;border:none;outline:none;flex:1;min-width:0;padding:0;}
@@ -535,10 +535,7 @@ function render(){
         <div class="name-row">
           <input class="player-name" id="player-name-input" value="${esc(player.name)}" />
         </div>
-        <div class="name-sub">
-          <span class="name-sub-text">Rêver, croire, réussir</span>
-          ${state.players.length>1 ? `<button class="link-btn" data-action="delete-player">Supprimer ce joueur</button>` : ""}
-        </div>
+        ${state.players.length>1 ? `<div class="name-sub"><button class="link-btn" data-action="delete-player">Supprimer ce joueur</button></div>` : ""}
       </div>
     </div>
 
