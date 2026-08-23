@@ -60,8 +60,13 @@
   .club-logo-badge img{width:100%;height:100%;object-fit:contain;display:block;}
   .club-logo-badge .club-circle-fallback{font-size:9px;color:#0B1220;}
 
-  .banner-extra-photo{height:84px;flex:1;display:flex;align-items:center;justify-content:flex-end;min-width:60px;}
-  .banner-extra-photo img{height:100%;width:auto;max-width:100%;object-fit:contain;border-radius:10px;display:block;}
+  .player-showcase{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;min-width:80px;position:relative;z-index:1;}
+  .player-showcase-img-wrap{height:150px;display:flex;align-items:flex-end;justify-content:center;position:relative;}
+  .player-showcase-img-wrap img{height:100%;width:auto;max-width:100%;object-fit:contain;display:block;position:relative;z-index:2;filter:drop-shadow(0 6px 8px rgba(0,0,0,0.45));}
+  .player-pedestal{margin-top:-8px;width:76px;padding:5px 6px 7px;background:linear-gradient(180deg,#1B4176 0%,#0B1220 100%);border:1px solid var(--blue);border-radius:8px 8px 14px 14px;text-align:center;box-shadow:0 6px 12px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.08);position:relative;z-index:1;}
+  .player-pedestal::before{content:"";position:absolute;left:6%;right:6%;bottom:100%;height:6px;background:radial-gradient(ellipse at center, rgba(59,130,246,0.35), transparent 70%);}
+  .pedestal-number-input{display:block;width:100%;background:transparent;border:none;outline:none;text-align:center;font-family:'Teko',sans-serif;font-weight:700;font-size:20px;line-height:1;color:#9CC1FF;padding:0;}
+  .pedestal-position-input{display:block;width:100%;background:transparent;border:none;outline:none;text-align:center;font-size:8px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-secondary);padding:0;margin-top:2px;}
 
   .banner-bottom{display:flex;flex-direction:column;gap:0px;position:relative;z-index:1;padding-top:12px;border-top:1px solid rgba(255,255,255,0.06);}
   .banner-name-block{flex:1;min-width:200px;display:flex;flex-direction:column;gap:0px;margin-top:20px;}
@@ -192,7 +197,7 @@ const emptyYear = () => ({ id: uid(), age:"", club:"", niveau:"", potentiel:"", 
 const emptyGoal = (t) => ({ id: uid(), text: t || "", completed: false });
 const emptyPlayer = (n) => ({
   id: uid(), name: n || "Nouveau joueur",
-  currentClub:"", currentLeague:"", dreamClub:"", dreamLeague:"",
+  currentClub:"", currentLeague:"", dreamClub:"", dreamLeague:"", position:"", number:"",
   goals: [emptyGoal("Rêve ultime : être recruté par un grand club")],
   years: [emptyYear()],
 });
@@ -309,7 +314,7 @@ function migrateOld(){
   return old.map(p => ({
     id: p.id || uid(),
     name: p.name || "Joueur",
-    currentClub:"", currentLeague:"", dreamClub:"", dreamLeague:"",
+    currentClub:"", currentLeague:"", dreamClub:"", dreamLeague:"", position:"", number:"",
     goals: [emptyGoal("Rêve ultime : être recruté par un grand club")],
     years: (p.years||[]).map(y => ({
       id: y.id || uid(), age: y.age||"", club: y.club||"", niveau: y.niveau||"",
@@ -508,8 +513,14 @@ function render(){
             ${clubLogoImg(player.currentClub, playerIndex)}
           </div>
         </div>
-        <div class="banner-extra-photo">
-          <img src="images/joueur-kawasaki.png" alt="${esc(player.name)} en tenue de Kawasaki Frontale" />
+        <div class="player-showcase">
+          <div class="player-showcase-img-wrap">
+            <img src="images/joueur-kawasaki.png" alt="${esc(player.name)} en tenue de Kawasaki Frontale" />
+          </div>
+          <div class="player-pedestal">
+            <input class="pedestal-number-input" id="player-number-input" value="${esc(player.number)}" placeholder="N°" />
+            <input class="pedestal-position-input" id="player-position-input" value="${esc(player.position)}" placeholder="Poste" />
+          </div>
         </div>
       </div>
       <div class="banner-bottom">
@@ -794,6 +805,12 @@ function attachEvents(){
   const dlInput = root.querySelector('#dream-league-input');
   if(dlInput) dlInput.addEventListener('input', () => { currentPlayer().dreamLeague = dlInput.value; touch(); });
   if(dlInput) dlInput.addEventListener('change', () => { currentPlayer().dreamLeague = dlInput.value; touch(); });
+  const numInput = root.querySelector('#player-number-input');
+  if(numInput) numInput.addEventListener('input', () => { currentPlayer().number = numInput.value; touch(); });
+  if(numInput) numInput.addEventListener('change', () => { currentPlayer().number = numInput.value; touch(); });
+  const posInput = root.querySelector('#player-position-input');
+  if(posInput) posInput.addEventListener('input', () => { currentPlayer().position = posInput.value; touch(); });
+  if(posInput) posInput.addEventListener('change', () => { currentPlayer().position = posInput.value; touch(); });
 
   const addYearBtn = root.querySelector('[data-action="add-year"]');
   if(addYearBtn) addYearBtn.addEventListener('click', () => { currentPlayer().years.push(emptyYear()); touch(); render(); });
