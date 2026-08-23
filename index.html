@@ -60,6 +60,9 @@
   .club-logo-badge img{width:100%;height:100%;object-fit:contain;display:block;}
   .club-logo-badge .club-circle-fallback{font-size:9px;color:#0B1220;}
 
+  .banner-extra-photo{height:84px;flex:1;display:flex;align-items:center;justify-content:flex-end;min-width:60px;}
+  .banner-extra-photo img{height:100%;width:auto;max-width:100%;object-fit:contain;border-radius:10px;display:block;}
+
   .banner-bottom{display:flex;flex-direction:column;gap:0px;position:relative;z-index:1;padding-top:12px;border-top:1px solid rgba(255,255,255,0.06);}
   .banner-name-block{flex:1;min-width:200px;display:flex;flex-direction:column;gap:0px;margin-top:20px;}
   .name-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
@@ -504,6 +507,9 @@ function render(){
           <div class="club-logo-badge">
             ${clubLogoImg(player.currentClub, playerIndex)}
           </div>
+        </div>
+        <div class="banner-extra-photo">
+          <img src="images/joueur-kawasaki.png" alt="${esc(player.name)} en tenue de Kawasaki Frontale" />
         </div>
       </div>
       <div class="banner-bottom">
