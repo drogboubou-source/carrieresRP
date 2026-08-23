@@ -56,9 +56,9 @@
   .flag-badge{position:absolute;right:-6px;bottom:-6px;width:30px;height:22px;border-radius:5px;overflow:hidden;box-shadow:0 0 0 2px #0B1220, 0 0 0 3px var(--border);z-index:2;}
   .flag-badge img{width:100%;height:100%;object-fit:cover;display:block;}
 
-  .club-logo-side{width:44px;height:44px;border-radius:50%;overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;position:relative;background:transparent;}
-  .club-logo-side img{width:100%;height:100%;object-fit:contain;display:block;}
-  .club-logo-side .club-circle-fallback{font-size:15px;}
+  .club-logo-badge{position:absolute;left:-6px;bottom:-6px;width:30px;height:30px;border-radius:50%;overflow:hidden;box-shadow:0 0 0 2px #0B1220, 0 0 0 3px var(--border);z-index:2;background:#0B1220;display:flex;align-items:center;justify-content:center;}
+  .club-logo-badge img{width:100%;height:100%;object-fit:contain;display:block;}
+  .club-logo-badge .club-circle-fallback{font-size:11px;}
 
   .banner-bottom{display:flex;flex-direction:column;gap:0px;position:relative;z-index:1;padding-top:12px;border-top:1px solid rgba(255,255,255,0.06);}
   .banner-name-block{flex:1;min-width:200px;display:flex;flex-direction:column;gap:0px;margin-top:20px;}
@@ -493,9 +493,6 @@ function render(){
     <div class="banner has-photo" id="player-banner">
       <span class="mode-pill">Mode RP</span>
       <div class="banner-top">
-        <div class="club-logo-side">
-          ${clubLogoImg(player.currentClub, playerIndex)}
-        </div>
         <div class="photo-wrap">
           <div class="photo-bleed">
             <img id="player-photo-img" data-base="images/joueur-${playerIndex+1}" data-ext-idx="0" src="images/joueur-${playerIndex+1}.png" alt="Photo de ${esc(player.name)}" onerror="handlePhotoError(this)" />
@@ -503,6 +500,9 @@ function render(){
           <div class="avatar avatar-fallback" style="display:none">${esc(initials(player.name))}</div>
           <div class="flag-badge">
             <img data-base="images/flag-${playerIndex+1}" data-ext-idx="0" src="images/flag-${playerIndex+1}.png" alt="Drapeau" onerror="handleFlagError(this)" />
+          </div>
+          <div class="club-logo-badge">
+            ${clubLogoImg(player.currentClub, playerIndex)}
           </div>
         </div>
       </div>
