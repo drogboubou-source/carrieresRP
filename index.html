@@ -339,12 +339,13 @@ function handleClubLogoError(img){
     if(circle) circle.classList.remove('logo-circle');
   }
 }
-function clubBadge(clubName, colorClass){
-  const slug = slugify(clubName);
-  if(!slug){
+function clubBadge(clubName, colorClass, kind, playerIndex){
+  if(!clubName){
     return `<div class="club-circle ${colorClass}">?</div>`;
   }
-  const base = `images/club-${slug}`;
+  const base = (kind && playerIndex != null)
+    ? `images/club-${kind}-${playerIndex+1}`
+    : `images/club-${slugify(clubName)}`;
   return `<div class="club-circle ${colorClass} logo-circle">
     <img src="${base}.png" data-base="${base}" data-ext-idx="0" alt="${esc(clubName)}" onerror="handleClubLogoError(this)" />
     <span class="club-circle-fallback">${esc(initials(clubName))}</span>
@@ -504,7 +505,7 @@ function render(){
         <div class="club-badge">
           <div class="club-label" style="color:var(--blue)">Club actuel</div>
           <div class="club-badge-row">
-            ${clubBadge(player.currentClub, "blue mini")}
+            ${clubBadge(player.currentClub, "blue mini", "current", playerIndex)}
             <div>
               <input class="club-text-input" id="current-club-input" value="${esc(player.currentClub)}" placeholder="Club actuel" />
               <br/>
@@ -515,7 +516,7 @@ function render(){
         <div class="club-badge">
           <div class="club-label" style="color:var(--red)">Club rêvé</div>
           <div class="club-badge-row">
-            ${clubBadge(player.dreamClub, "red mini")}
+            ${clubBadge(player.dreamClub, "red mini", "dream", playerIndex)}
             <div>
               <input class="club-text-input" id="dream-club-input" value="${esc(player.dreamClub)}" placeholder="Club rêvé" />
               <br/>
