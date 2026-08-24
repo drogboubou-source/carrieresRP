@@ -48,17 +48,17 @@
   .banner::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg, rgba(59,130,246,0.14), transparent 40%, rgba(226,80,74,0.14));pointer-events:none;z-index:0;}
 
   .banner-top{display:flex;align-items:center;gap:18px;position:relative;z-index:1;flex-wrap:wrap;}
-  .photo-wrap{position:relative;top:70px;width:84px;height:84px;flex-shrink:0;}
-  .photo-bleed{width:84px;height:84px;border-radius:14px;overflow:hidden;box-shadow:0 0 0 1.5px var(--border);}
-  .photo-bleed img{width:100%;height:100%;object-fit:cover;object-position:top center;filter:saturate(1.05) contrast(1.03);}
-  .avatar.avatar-fallback{width:84px;height:84px;border-radius:14px;}
-  .avatar{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--red));display:flex;align-items:center;justify-content:center;font-family:'Teko',sans-serif;font-size:26px;font-weight:600;color:#fff;flex-shrink:0;}
-  .flag-badge{position:absolute;right:-6px;bottom:-6px;width:30px;height:22px;border-radius:5px;overflow:hidden;box-shadow:0 0 0 2px #0B1220, 0 0 0 3px var(--border);z-index:2;}
-  .flag-badge img{width:100%;height:100%;object-fit:cover;display:block;}
 
-  .club-logo-badge{position:absolute;left:-6px;bottom:-6px;width:26px;height:26px;border-radius:50%;overflow:hidden;box-shadow:0 0 0 2px #0B1220, 0 0 0 3px #7EC8E3, 0 3px 10px rgba(0,0,0,0.5);z-index:2;background:radial-gradient(circle at 35% 30%, #ffffff 0%, #eef2f8 55%, #d7e0ee 100%);display:flex;align-items:center;justify-content:center;padding:2px;}
-  .club-logo-badge img{width:100%;height:100%;object-fit:contain;display:block;}
-  .club-logo-badge .club-circle-fallback{font-size:9px;color:#0B1220;}
+  .player-id-card{position:relative;top:70px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 16px 12px;background:linear-gradient(155deg, rgba(20,35,64,0.65) 0%, rgba(9,14,26,0.75) 100%);border:1px solid rgba(126,200,227,0.4);border-radius:16px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);box-shadow:0 10px 22px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);}
+  .player-id-top{display:flex;align-items:center;gap:8px;}
+  .player-id-club{width:36px;height:36px;border-radius:50%;overflow:hidden;background:radial-gradient(circle at 35% 30%, #ffffff 0%, #eef2f8 55%, #d7e0ee 100%);display:flex;align-items:center;justify-content:center;padding:3px;box-shadow:0 3px 8px rgba(0,0,0,0.45), 0 0 0 1px rgba(126,200,227,0.5);flex-shrink:0;}
+  .player-id-club img{width:100%;height:100%;object-fit:contain;display:block;}
+  .player-id-club .club-circle-fallback{font-size:10px;color:#0B1220;}
+  .player-id-flag{width:32px;height:23px;border-radius:5px;overflow:hidden;box-shadow:0 3px 8px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.25);flex-shrink:0;}
+  .player-id-flag img{width:100%;height:100%;object-fit:cover;display:block;}
+  .player-id-divider{width:64%;height:1px;background:linear-gradient(90deg, transparent, rgba(126,200,227,0.5), transparent);}
+  .player-id-number{background:transparent;border:none;outline:none;text-align:center;width:56px;font-family:'Teko',sans-serif;font-weight:700;font-size:32px;line-height:1;color:#F2F8FF;padding:0;}
+  .player-id-position{background:transparent;border:none;outline:none;text-align:center;width:80px;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:1.3px;color:#9CC1FF;padding:0;margin-top:-2px;}
 
   .player-info-card{flex-shrink:0;display:flex;align-items:flex-end;gap:5px;margin-left:4px;position:relative;top:20px;}
   .info-block{display:flex;flex-direction:column;align-items:center;}
@@ -503,17 +503,18 @@ function render(){
 
     <div class="banner has-photo" id="player-banner">
       <div class="banner-top">
-        <div class="photo-wrap">
-          <div class="photo-bleed">
-            <img id="player-photo-img" data-base="images/joueur-${playerIndex+1}" data-ext-idx="0" src="images/joueur-${playerIndex+1}.png" alt="Photo de ${esc(player.name)}" onerror="handlePhotoError(this)" />
+        <div class="player-id-card">
+          <div class="player-id-top">
+            <div class="player-id-club">
+              ${clubLogoImg(player.currentClub, playerIndex)}
+            </div>
+            <div class="player-id-flag">
+              <img data-base="images/flag-${playerIndex+1}" data-ext-idx="0" src="images/flag-${playerIndex+1}.png" alt="Drapeau" onerror="handleFlagError(this)" />
+            </div>
           </div>
-          <div class="avatar avatar-fallback" style="display:none">${esc(initials(player.name))}</div>
-          <div class="flag-badge">
-            <img data-base="images/flag-${playerIndex+1}" data-ext-idx="0" src="images/flag-${playerIndex+1}.png" alt="Drapeau" onerror="handleFlagError(this)" />
-          </div>
-          <div class="club-logo-badge">
-            ${clubLogoImg(player.currentClub, playerIndex)}
-          </div>
+          <div class="player-id-divider"></div>
+          <input class="player-id-number" id="player-number-input" value="${esc(player.number)}" placeholder="-" />
+          <input class="player-id-position" id="player-position-input" value="${esc(player.position)}" placeholder="POSTE" />
         </div>
       </div>
       <div class="banner-bottom">
