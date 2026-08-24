@@ -44,7 +44,7 @@
   .link-btn{background:transparent;border:none;color:var(--text-secondary);font-size:11px;text-decoration:underline;padding:0;}
 
   /* HERO BANNER */
-  .banner{position:relative;overflow:hidden;border-radius:14px;border:1px solid var(--border);background:linear-gradient(180deg, rgba(8,13,26,0.32) 0%, rgba(8,13,26,0.5) 100%), url('images/front4.png') center/cover no-repeat;padding:20px 24px;margin-bottom:14px;display:flex;flex-direction:column;gap:16px;aspect-ratio:3/2;}
+  .banner{position:relative;overflow:hidden;border-radius:14px;border:1px solid var(--border);background:url('images/front4.png') center/cover no-repeat;padding:20px 24px;margin-bottom:14px;display:flex;flex-direction:column;gap:16px;aspect-ratio:3/2;}
   .banner::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg, rgba(59,130,246,0.14), transparent 40%, rgba(226,80,74,0.14));pointer-events:none;z-index:0;}
 
   .banner-top{display:flex;align-items:center;gap:18px;position:relative;z-index:1;flex-wrap:wrap;}
@@ -505,10 +505,10 @@ function render(){
       <div class="banner-top">
       </div>
       <div class="banner-bottom">
-        <div class="name-row">
-          <input class="player-name" id="player-name-input" value="${esc(player.name)}" />
+        <div class="name-sub">
+          <button class="link-btn" data-action="rename-player">✎ Renommer</button>
+          ${state.players.length>1 ? `<button class="link-btn" data-action="delete-player">Supprimer ce joueur</button>` : ""}
         </div>
-        ${state.players.length>1 ? `<div class="name-sub"><button class="link-btn" data-action="delete-player">Supprimer ce joueur</button></div>` : ""}
       </div>
     </div>
 
@@ -766,6 +766,12 @@ function attachEvents(){
     if(state.players.length<=1) return;
     state.players = state.players.filter(p => p.id !== state.playerId);
     state.playerId = state.players[0].id; touch(); render();
+  });
+  const renamePlayerBtn = root.querySelector('[data-action="rename-player"]');
+  if(renamePlayerBtn) renamePlayerBtn.addEventListener('click', () => {
+    const p = currentPlayer();
+    const newName = prompt("Nouveau nom du joueur", p.name);
+    if(newName && newName.trim()){ p.name = newName.trim(); touch(); render(); }
   });
 
   const nameInput = root.querySelector('#player-name-input');
