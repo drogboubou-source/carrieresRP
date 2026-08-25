@@ -133,6 +133,24 @@
   th.col-contrat,td.col-contrat{width:66px;}
   .del-cell{width:26px;}
   .del-btn{background:transparent;border:none;color:var(--text-muted);font-size:14px;line-height:1;padding:2px;}
+
+  .standings-table{min-width:520px;}
+  .standings-table th.col-pos,.standings-table td.col-pos{width:34px;}
+  .standings-table th.col-team,.standings-table td.col-team{width:auto;text-align:left;padding-left:10px;}
+  .standings-table th.col-stat,.standings-table td.col-stat{width:38px;}
+  .standings-table th.col-pts,.standings-table td.col-pts{width:44px;}
+  .team-cell{display:flex;align-items:center;gap:8px;}
+  .team-crest{width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,0.08);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:var(--text-muted);overflow:hidden;}
+  .team-crest img{width:100%;height:100%;object-fit:contain;}
+  .standings-table tbody tr.is-me{background:linear-gradient(90deg, rgba(126,200,227,0.16), rgba(126,200,227,0.04));}
+  .standings-table tbody tr.is-me td{font-weight:700;color:#EAF4FF;}
+  .standings-table tbody tr.is-me td.col-pos{color:#7EC8E3;}
+  .pos-badge{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:5px;font-weight:700;font-size:11px;}
+  .pos-badge.champ{background:linear-gradient(180deg,#F4D35E,#B8860B);color:#241900;}
+  .pos-badge.acl{background:rgba(126,200,227,0.18);color:#9CC1FF;}
+  .pos-badge.releg{background:rgba(226,80,74,0.18);color:#F0908B;}
+  .season-select-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:2px 2px 10px;}
+  .season-select{background:var(--bg);border:1px solid var(--input-border);border-radius:7px;color:var(--text);font-size:11px;padding:5px 8px;}
   .del-btn:hover{color:var(--red);}
   .note-cell input{font-weight:700;}
   .add-row-bar{padding:8px 4px 2px;}
@@ -569,6 +587,8 @@ function render(){
       </div>
     </div>
 
+    ${standingsCard()}
+
     <div class="ref-grid3">
       <div class="ref-col">
         ${refCard("var(--blue)", "Évolution du potentiel", POTENTIAL_RULES.map(r => refRow(r[0], r[1], r[2])).join(""))}
@@ -627,6 +647,71 @@ function refCard(color, title, rowsHtml){
   return `<div class="card">
     <div class="card-head"><span class="dot" style="background:${color}"></span><span class="card-title">${title}</span></div>
     <div class="card-body">${rowsHtml}</div>
+  </div>`;
+}
+
+// --- DEMO: classement inventé (à remplacer par de vraies données par saison) ---
+const DEMO_STANDINGS = [
+  { pos:1, team:"Vissel Kobe", j:34, v:22, n:6, d:6, diff:"+28", pts:72, tag:"champ" },
+  { pos:2, team:"Yokohama F. Marinos", j:34, v:20, n:8, d:6, diff:"+24", pts:68, tag:"acl" },
+  { pos:3, team:"Sanfrecce Hiroshima", j:34, v:19, n:7, d:8, diff:"+19", pts:64, tag:"acl" },
+  { pos:4, team:"Kawasaki Frontale", j:34, v:18, n:9, d:7, diff:"+21", pts:63, tag:"acl", me:true },
+  { pos:5, team:"Urawa Red Diamonds", j:34, v:17, n:8, d:9, diff:"+12", pts:59 },
+  { pos:6, team:"Kashima Antlers", j:34, v:16, n:9, d:9, diff:"+9", pts:57 },
+  { pos:7, team:"Nagoya Grampus", j:34, v:15, n:10, d:9, diff:"+6", pts:55 },
+  { pos:8, team:"Gamba Osaka", j:34, v:14, n:11, d:9, diff:"+4", pts:53 },
+  { pos:9, team:"FC Tokyo", j:34, v:13, n:10, d:11, diff:"0", pts:49 },
+  { pos:10, team:"Cerezo Osaka", j:34, v:12, n:11, d:11, diff:"-2", pts:47 },
+  { pos:11, team:"Kashiwa Reysol", j:34, v:11, n:10, d:13, diff:"-5", pts:43 },
+  { pos:12, team:"Kyoto Sanga", j:34, v:10, n:11, d:13, diff:"-7", pts:41 },
+  { pos:13, team:"Consadole Sapporo", j:34, v:10, n:9, d:15, diff:"-10", pts:39 },
+  { pos:14, team:"Shonan Bellmare", j:34, v:9, n:10, d:15, diff:"-13", pts:37 },
+  { pos:15, team:"Albirex Niigata", j:34, v:8, n:11, d:15, diff:"-16", pts:35 },
+  { pos:16, team:"Avispa Fukuoka", j:34, v:8, n:8, d:18, diff:"-19", pts:32, tag:"releg" },
+  { pos:17, team:"Machida Zelvia", j:34, v:6, n:9, d:19, diff:"-24", pts:27, tag:"releg" },
+  { pos:18, team:"Yokohama FC", j:34, v:5, n:8, d:21, diff:"-31", pts:23, tag:"releg" },
+];
+function standingsRow(row){
+  const badge = row.tag ? `<span class="pos-badge ${row.tag}">${row.pos}</span>` : row.pos;
+  return `<tr class="${row.me ? 'is-me' : ''}">
+    <td class="col-pos">${badge}</td>
+    <td class="col-team"><div class="team-cell"><span class="team-crest">${esc(row.team.slice(0,2).toUpperCase())}</span>${esc(row.team)}</div></td>
+    <td class="col-stat">${row.j}</td>
+    <td class="col-stat">${row.v}</td>
+    <td class="col-stat">${row.n}</td>
+    <td class="col-stat">${row.d}</td>
+    <td class="col-stat">${row.diff}</td>
+    <td class="col-pts">${row.pts}</td>
+  </tr>`;
+}
+function standingsCard(){
+  return `<div class="card" style="margin-bottom:14px">
+    <div class="card-head"><span class="dot" style="background:#7EC8E3"></span><span class="card-title">Classement — J1 League</span></div>
+    <div class="card-body">
+      <div class="season-select-row">
+        <select class="season-select"><option>Saison 2025</option></select>
+        <span style="font-size:10px;color:var(--text-muted)">🏆 Champion · 🔵 Phase ACL · 🔴 Relégation</span>
+      </div>
+      <div class="table-wrap">
+        <table class="standings-table">
+          <thead>
+            <tr>
+              <th class="col-pos">#</th>
+              <th class="col-team">Club</th>
+              <th class="col-stat">J</th>
+              <th class="col-stat">V</th>
+              <th class="col-stat">N</th>
+              <th class="col-stat">D</th>
+              <th class="col-stat">+/-</th>
+              <th class="col-pts">Pts</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${DEMO_STANDINGS.map(standingsRow).join("")}
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>`;
 }
 function refRow(label, value, cls){
